@@ -19,7 +19,25 @@
 
 namespace sjtu {
 class int2048 {
-  // todo
+private:
+  static const int BASE = 10000;       // 10^4
+  static const int BASE_DIGS = 4;      // digits per limb
+  std::vector<int> limbs;              // little-endian limbs
+  bool negative = false;               // sign flag, false for >= 0
+
+  // helpers
+  void normalize();                    // remove leading zeros, fix sign for zero
+  static int compareAbs(const int2048 &a, const int2048 &b); // -1,0,1
+  static void addAbsTo(int2048 &a, const int2048 &b);         // a = |a| + |b|
+  static void subAbsTo(int2048 &a, const int2048 &b);         // a = |a| - |b|, require |a|>=|b|
+
+  // multiplication helpers
+  static int2048 multiplySchoolbook(const int2048 &a, const int2048 &b);
+  static int2048 multiplyFFT(const int2048 &a, const int2048 &b);
+
+  // division/mod helpers (absolute values)
+  static void divmodAbs(const int2048 &a, const int2048 &b, int2048 &q, int2048 &r);
+
 public:
   // 构造函数
   int2048();
